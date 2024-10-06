@@ -128,10 +128,12 @@ def play_flashcard(deck):
                 info = delete
                 break
             else:
+                olddue = card.due
                 card.handle(choice)
                 if card.due < (datetime.now() + timedelta(hours=1)).timestamp():
-                    heapq.heappush(cards, (queues.QUEUE_PRIORITY[card.queue], card.due, card))
+                    heapq.heappush(cards, (queues.QUEUE_PRIORITY[card.queue], -card.due, card))
                 def handle():
+                    console.print(f"old {olddue}, new {card.due}")
                     console.print(f"[blue]Flashcard marked as {choice}[/blue]")
                 info = handle
                 break

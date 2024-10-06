@@ -45,13 +45,13 @@ def start_session(deck: Deck):
 
     heap = []
     for card in learning:
-        heap.append((0, card.due, card))
+        heap.append((0, -card.due, card))
 
     for card in new_cards:
-        heap.append((1, card.due, card))
+        heap.append((1, -card.due, card))
 
     for card in reviewing:
-        heap.append((2, card.due, card))
+        heap.append((2, -card.due, card))
 
     heapify(heap)
     return heap
