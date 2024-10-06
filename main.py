@@ -119,6 +119,8 @@ def play_flashcard(deck):
             if choice == FlashOptions.REVEAL:
                 show_answer = True
                 info = noop
+            elif choice == FlashOptions.EXIT:
+                exit()
             elif choice == FlashOptions.DELETE:
                 models.delete_card(card.id)
                 def delete():

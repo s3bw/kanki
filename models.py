@@ -7,6 +7,24 @@ from peewee import Model, CharField, IntegerField, ForeignKeyField, SqliteDataba
 MAX_TRAINING_REPS = 5
 
 
+class ModelComparitorMixin:
+
+    def __lt__(self, other):
+        return self.id < other.id
+
+    def __le__(self, other):
+        return self.id <= other.id
+
+    def __gt__(self, other):
+        return self.id > other.id
+
+    def __ge__(self, other):
+        return self.id >= other.id
+
+    def __eq__(self, other):
+        return self.id == other.id
+
+
 class Queue(Enum):
     NEW = 0
     LEARNING = 1
@@ -28,6 +46,7 @@ class FlashOptions(Enum):
     GOOD = "2"
     EASY = "3"
     DELETE = "d"
+    EXIT = "q"
 
 
 db = SqliteDatabase('anki-beta.db')
@@ -56,7 +75,7 @@ def compute_due(**kwargs):
     return (datetime.now() + timedelta(**kwargs)).timestamp()
 
 
-class Card(Model):
+class Card(Model, ModelComparitorMixin):
     id = IntegerField(primary_key=True)
     question = CharField(null=False)
     answer = CharField(null=False)
