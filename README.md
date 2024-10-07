@@ -4,15 +4,15 @@
 
 ## Playing
 
-![screenshot](./static/play_view.png)
+![screenshot](static/play_view.png)
 
 ## View/Editing
 
-![screenshot](./static/card_view.png)
+![screenshot](static/card_view.png)
 
 ## Quick Start
 
-```
+```bash
 # Creates tables
 python models.py
 # Starts Kanki
