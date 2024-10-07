@@ -1,7 +1,15 @@
 from enum import Enum
 from datetime import datetime, timedelta
 
-from peewee import Model, CharField, IntegerField, ForeignKeyField, SqliteDatabase, ManyToManyField, FloatField
+from peewee import (
+    Model,
+    CharField,
+    IntegerField,
+    ForeignKeyField,
+    SqliteDatabase,
+    ManyToManyField,
+    FloatField,
+)
 
 
 MAX_TRAINING_REPS = 5
@@ -49,7 +57,7 @@ class FlashOptions(Enum):
     EXIT = "q"
 
 
-db = SqliteDatabase('kanki-beta.db')
+db = SqliteDatabase("kanki-beta.db")
 
 
 class Deck(Model):
@@ -64,6 +72,7 @@ class Topic(Model):
     """
     new_card.topic.add("network")
     """
+
     id = IntegerField(primary_key=True)
     name = CharField(null=False, unique=True)
 
@@ -79,7 +88,7 @@ class Card(Model, ModelComparitorMixin):
     id = IntegerField(primary_key=True)
     question = CharField(null=False)
     answer = CharField(null=False)
-    deck = ForeignKeyField(Deck, backref='cards', on_delete='CASCADE')
+    deck = ForeignKeyField(Deck, backref="cards", on_delete="CASCADE")
     queue = IntegerField(null=False)
     type = IntegerField(null=False)
     due = FloatField(null=False)
@@ -165,10 +174,9 @@ class Card(Model, ModelComparitorMixin):
                 pass
 
 
-
 class CardTopicThrough(Model):
-    card = ForeignKeyField(Card, backref='topics')
-    topic = ForeignKeyField(Topic, backref='cards')
+    card = ForeignKeyField(Card, backref="topics")
+    topic = ForeignKeyField(Topic, backref="cards")
 
     class Meta:
 

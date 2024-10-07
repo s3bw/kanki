@@ -14,7 +14,7 @@ from vim_edit import editor
 
 import models
 import queues
-from models import Deck, FlashOptions, Card
+from models import Deck, FlashOptions, Card, Queue
 
 
 console = Console()
@@ -73,17 +73,63 @@ def edit_deck(deck: Deck):
         table.add_row(str(card.id), str(card.queue), card.question, card.answer)
 
     console.print(table)
-    select = console.input("[bold yellow]Enter ID of card to edit[/bold yellow]")
+    select = console.input("[bold yellow]Enter ID of card to edit:[/bold yellow] ")
+    if not select:
+        return
 
     card = Card.get_by_id(select)
+    if not card:
+        return
+    view_card(card)
+    return
 
+
+def view_card(card):
+    answer = Group(
+        f"[blue]Question:[/blue] {card.question}\n",
+        "[yellow]Answer:[/yellow]",
+        Markdown(card.answer),
+    )
+    panel = Panel(answer)
+    table = Table(title="Stats", box=box.SQUARE)
+    table.add_column("ID", justify="right", style="cyan")
+    table.add_column("queue", style="yellow")
+    table.add_column("type")
+    table.add_column("due")
+    table.add_column("left")
+    table.add_column("reps")
+    table.add_column("ivl")
+    table.add_column("factor")
+    table.add_row(
+        str(card.id),
+        Queue(card.queue).name.lower(),
+        str(card.type),
+        str(card.due),
+        str(card.left),
+        str(card.reps),
+        str(card.ivl),
+        str(card.factor),
+    )
+    group = Group(panel, table)
+    console.print(group)
+    response = Prompt.ask(
+        "[blue]Edit question: \[Q][/blue]  [yellow]Edit answer: [A][/yellow] \[q]uit",
+        choices=["Q", "A", "q"],
+    )
+    if response == "Q":
+        card.question = edit_card_attribute(card.question)
+        card.save()
+    elif response == "A":
+        card.answer = edit_card_attribute(card.answer)
+        card.save()
+
+
+def edit_card_attribute(attribute):
     with NamedTemporaryFile(mode="r+", suffix=".tmp") as file:
-        file.write(card.answer)
+        file.write(attribute)
         editor.open(file)
         content = file.read()
-
-    card.answer = content
-    card.save()
+    return content
 
 
 def extend_deck(deck):
