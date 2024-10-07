@@ -49,7 +49,7 @@ class FlashOptions(Enum):
     EXIT = "q"
 
 
-db = SqliteDatabase('anki-beta.db')
+db = SqliteDatabase('kanki-beta.db')
 
 
 class Deck(Model):

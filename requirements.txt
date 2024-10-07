@@ -1,3 +1,5 @@
 rich
 peewee
 ruff
+black
+vim-edit
